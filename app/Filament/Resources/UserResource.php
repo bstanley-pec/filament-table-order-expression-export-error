@@ -34,11 +34,14 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         $table
+            ->modifyQueryUsing(fn ($query) => $query->with('role'))
             ->columns([
                 TextColumn::make('name')
-                    ->sortable(
-                        query: fn(Builder $query, string $direction): Builder => $query->orderBy(new Expression("(select name from users u2 where u2.id = users.id)"), $direction),
-                    )
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('role.name')
+                    ->searchable()
+                    ->sortable()
             ])
             ->filters([
                 //
@@ -54,8 +57,6 @@ class UserResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
-
-        \Log::info($table->getQuery()->toRawSql());
 
         return $table;
     }

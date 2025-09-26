@@ -17,6 +17,8 @@ class UserExporter extends Exporter
             ExportColumn::make('id')
                 ->label('ID'),
             ExportColumn::make('name'),
+            ExportColumn::make('role.name')
+                ->label('Role'),
             ExportColumn::make('email'),
             ExportColumn::make('email_verified_at'),
             ExportColumn::make('created_at'),
